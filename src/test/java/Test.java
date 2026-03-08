@@ -22,17 +22,19 @@ public class Test {
     @CsvSource({
             "testcases/nfa1.txt, testcases/input1.txt, testcases/output1.txt",
             "testcases/nfa-member1.txt, testcases/nfa-member1-input.txt, testcases/nfa-member1-output.txt",
-            //"testcases/nfa-member2.txt, testcases/nfa-member2-input.txt, testcases/nfa-member2-output.txt",
+            "testcases/nfa-member2.txt, testcases/nfa-member2-input.txt, testcases/nfa-member2-output.txt",
             "testcases/nfa-member3.txt, testcases/nfa-member3-input.txt, testcases/nfa-member3-output.txt",
-            //"testcases/nfa-member4.txt, testcases/nfa-member4-input.txt, testcases/nfa-member4-output.txt",
-    })   
-    public void testOnDefaultInput(String nfaSpecFilePath, String inputFilePath, String outputFilePath) throws IOException, URISyntaxException {
-        //Loading files
+    // "testcases/nfa-member4.txt, testcases/nfa-member4-input.txt,
+    // testcases/nfa-member4-output.txt",
+    })
+    public void testOnDefaultInput(String nfaSpecFilePath, String inputFilePath, String outputFilePath)
+            throws IOException, URISyntaxException {
+        // Loading files
         Path nfaSpecPath = Paths.get(ClassLoader.getSystemResource(nfaSpecFilePath).toURI());
         Path inputPath = Paths.get(ClassLoader.getSystemResource(inputFilePath).toURI());
         Path outputPath = Paths.get(ClassLoader.getSystemResource(outputFilePath).toURI());
-        
-        //Reading and parsing the NFA specification
+
+        // Reading and parsing the NFA specification
         CharStream nfaSpec = CharStreams.fromFileName(nfaSpecPath.toString());
         NFAGrammarLexer lexer = new NFAGrammarLexer(nfaSpec);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -40,7 +42,7 @@ public class Test {
         ParseTree tree = parser.nfa(); // parse; start at prog
         NFABuilder builder = new NFABuilder();
         NFA nfa = builder.visit(tree);
-        
+
         // Getting output from the NFA given the input taken from the input file
         List<String> strings = Files.readAllLines(inputPath);
         Boolean[] result = new Boolean[strings.size()];
@@ -49,7 +51,7 @@ public class Test {
             result[index++] = nfa.accept(string);
         }
 
-        //Reading expected output and comparing
+        // Reading expected output and comparing
         String expecteOuput = Files.readString(Paths.get(outputPath.toString()));
 
         assertEquals(Arrays.toString(result), expecteOuput);

@@ -102,6 +102,7 @@ public class NFA {
         return buildDfaObject(dfaStates, dfaStateNames, dfaTransitions, initialClosure);
     }
 
+    // Gets all characters used in NFA transitions, excluding epsilon
     private Set<Character> getAlphabet() {
         Set<Character> alphabet = new HashSet<>();
         for (Map<Character, Set<String>> transitions : taulaTransicions.values()) {
@@ -115,6 +116,7 @@ public class NFA {
         return alphabet;
     }
 
+    // Returns the initial NFA state as a Set
     private Set<String> getInitialNfaState() {
         Set<String> initialNfaState = new HashSet<>();
         if (estatInicial != null) {
@@ -123,6 +125,7 @@ public class NFA {
         return initialNfaState;
     }
 
+    // Finds next reachable NFA states for a DFA state and a character
     private Set<String> getNextDfaState(Set<String> currentDfaState, Character c) {
         Set<String> nextNfaStates = new HashSet<>();
         for (String srcState : currentDfaState) {
@@ -134,6 +137,7 @@ public class NFA {
         return epsilonClosure(nextNfaStates);
     }
 
+    // Builds and returns the final DFA object from computed states and transitions
     private DFA buildDfaObject(List<Set<String>> dfaStates, Map<Set<String>, String> dfaStateNames,
             Map<Set<String>, Map<Character, Set<String>>> dfaTransitions,
             Set<String> initialClosure) {
@@ -173,6 +177,7 @@ public class NFA {
         return dfa;
     }
 
+    // Joins sorted NFA state names to generate a DFA state name (e.g. "q0,q1")
     private String generateStateName(Set<String> statesSet) {
         List<String> sortedStates = new ArrayList<>(statesSet);
         Collections.sort(sortedStates);
